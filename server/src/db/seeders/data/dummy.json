@@ -1,0 +1,99 @@
+[
+   {
+      "name": "Downloads",
+      "children": [
+         {
+            "name": "Music",
+            "files": [
+               {
+                  "name": "song1.mp3",
+                  "type": "audio",
+                  "size": "3.2 MB"
+               },
+               {
+                  "name": "song2.mp3",
+                  "type": "audio",
+                  "size": "4.1 MB"
+               }
+            ]
+         },
+         {
+            "name": "Videos",
+            "files": [
+               {
+                  "name": "movie.mp4",
+                  "type": "video",
+                  "duration": "2:15:30"
+               },
+               {
+                  "name": "tutorial.mp4",
+                  "type": "video",
+                  "duration": "15:45"
+               }
+            ],
+            "children": [
+               {
+                  "name": "Clips",
+                  "files": [
+                     {
+                        "name": "clip1.mp4",
+                        "type": "video",
+                        "duration": "0:30"
+                     }
+                  ]
+               }
+            ]
+         },
+         {
+            "name": "Documents",
+            "children": [
+               {
+                  "name": "Work",
+                  "files": [
+                     {
+                        "name": "report.pdf",
+                        "type": "document",
+                        "pages": 24
+                     },
+                     {
+                        "name": "budget.xlsx",
+                        "type": "document",
+                        "sheets": 3
+                     }
+                  ]
+               },
+               {
+                  "name": "Personal",
+                  "files": [
+                     {
+                        "name": "resume.pdf",
+                        "type": "document",
+                        "pages": 2
+                     },
+                     {
+                        "name": "diary.txt",
+                        "type": "document",
+                        "lines": 120
+                     }
+                  ]
+               }
+            ]
+         },
+         {
+            "name": "Images",
+            "files": [
+               {
+                  "name": "photo1.jpg",
+                  "type": "image",
+                  "resolution": "1920x1080"
+               },
+               {
+                  "name": "photo2.png",
+                  "type": "image",
+                  "resolution": "800x600"
+               }
+            ]
+         }
+      ]
+   }
+]

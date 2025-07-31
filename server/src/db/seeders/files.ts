@@ -1,21 +1,40 @@
-import data from "./data/files.json"
+import data from "./data/dummy.json"
 import { db } from "../client"
-import { files as filesTable } from "../schema"
+import { files as filesTable, folders as foldersTable } from "../schema"
 
 export async function execute() {
-   await seedItems(data)
+   await seedItems(data as unknown as Data[])
 }
 
-async function seedItems(items: typeof data, parentId?: number) {
+type Data = {
+   name: string
+   children?: Data[]
+   files: {
+      name: string
+      type: string
+      [key: string]: string | number
+   }[]
+}
+
+async function seedItems(items: Data[], parentId?: number) {
    for (const item of items) {
-      const result = await db.insert(filesTable).values({
+      const result = await db.insert(foldersTable).values({
          name: item.name,
          parent_id: parentId ?? null,
-         type: item.type as "dir" | "file",
       })
 
+      if (item.files && item.files.length > 0) {
+         for (const file of item.files) {
+            await db.insert(filesTable).values({
+               name: file.name,
+               type: file.type as (typeof filesTable.$inferInsert)["type"],
+               folderId: result[0].insertId,
+            })
+         }
+      }
+
       if (item.children && item.children.length > 0) {
-         await seedItems(item.children as typeof data, result[0].insertId)
+         await seedItems(item.children as Data[], result[0].insertId)
       }
    }
 }
