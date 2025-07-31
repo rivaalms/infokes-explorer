@@ -1,5 +1,6 @@
 import { drizzle } from "drizzle-orm/mysql2"
 import mysql from "mysql2/promise"
+import * as schema from "./schema"
 
 const client = mysql.createPool({
    host: process.env.DB_HOST as string,
@@ -8,4 +9,4 @@ const client = mysql.createPool({
    password: process.env.DB_PASSWORD || undefined,
    database: process.env.DB_NAME as string,
 })
-export const db = drizzle({ client })
+export const db = drizzle({ client, schema: { ...schema }, mode: "default" })
