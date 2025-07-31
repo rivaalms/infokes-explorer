@@ -1,0 +1,32 @@
+[
+   {
+      "name": "Downloads",
+      "type": "dir",
+      "children": [
+         {
+            "name": "Images",
+            "type": "dir",
+            "children": [
+               {
+                  "name": "cat.jpg",
+                  "type": "file"
+               },
+               {
+                  "name": "dog.jpg",
+                  "type": "file"
+               }
+            ]
+         }
+      ]
+   },
+   {
+      "name": "Documents",
+      "type": "dir",
+      "children": [
+         {
+            "name": "resume.pdf",
+            "type": "file"
+         }
+      ]
+   }
+]
