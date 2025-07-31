@@ -14,6 +14,14 @@ onMounted(async () => {
    })
    data.value = response.data.map((item) => ({ ...item, selected: false }))
 })
+
+function onItemClick(item: Model.File) {
+   if (item.type == "dir") {
+      fileStore.select(item)
+   } else {
+      alert(item.name)
+   }
+}
 </script>
 
 <template>
@@ -26,7 +34,10 @@ onMounted(async () => {
             <div class="col-span-3">
                <div class="grid grid-cols-6 gap-4">
                   <template v-for="item in fileStore.selected?.children">
-                     <div class="flex flex-col items-center">
+                     <div
+                        class="flex flex-col items-center hover:bg-blue-500/5 p-4 rounded-lg cursor-pointer"
+                        @click="onItemClick(item)"
+                     >
                         <span
                            class="size-12!"
                            :class="[
