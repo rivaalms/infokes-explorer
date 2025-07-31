@@ -9,10 +9,10 @@ const fileStore = useFileStore()
 const data = ref<Model.File[]>([])
 
 onMounted(async () => {
-   const response = await $fetch<Model.File[]>("/files", {
+   const response = await $fetch<API.Response<Model.File[]>>("/files", {
       method: "get",
    })
-   data.value = response.map((item) => ({ ...item, selected: false }))
+   data.value = response.data.map((item) => ({ ...item, selected: false }))
 })
 </script>
 

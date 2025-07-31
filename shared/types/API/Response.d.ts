@@ -6,9 +6,7 @@ declare global {
             message: string
             error: string
          }
-         data: {
-            data: T
-         }
+         data: T
       }
    }
 }

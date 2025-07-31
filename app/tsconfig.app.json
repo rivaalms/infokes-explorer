@@ -8,6 +8,6 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "types": ["./../shared/types/Model/File"]
+    "types": ["./../shared/types/Model/File", "./../shared/types/API/Response"]
   }
 }
