@@ -1,4 +1,5 @@
 import { Elysia } from "elysia"
+import { cors } from "@elysiajs/cors"
 import { fileC } from "./controllers/files"
 
 const port = process.env.SERVER_PORT ?? 3000
@@ -6,7 +7,10 @@ const app = new Elysia({
    prefix: "/api",
    normalize: true,
 })
-   .get("/files", () => fileC.get() )
+   .use(
+      cors()
+   )
+   .get("/files", () => fileC.get())
    .listen(port)
 
 console.log(
