@@ -7,7 +7,7 @@ export async function execute() {
 }
 
 async function seedItems(items: typeof data, parentId?: number) {
-   items.forEach(async (item) => {
+   for (const item of items) {
       const result = await db.insert(filesTable).values({
          name: item.name,
          parent_id: parentId ?? null,
@@ -17,5 +17,5 @@ async function seedItems(items: typeof data, parentId?: number) {
       if (item.children && item.children.length > 0) {
          await seedItems(item.children as typeof data, result[0].insertId)
       }
-   })
+   }
 }
