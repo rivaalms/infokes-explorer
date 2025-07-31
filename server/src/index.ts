@@ -1,6 +1,6 @@
 import { Elysia } from "elysia"
 import { cors } from "@elysiajs/cors"
-import { fileC } from "./controllers/files"
+import { fileC } from "./http/controllers/files"
 
 const port = process.env.SERVER_PORT ?? 3000
 const app = new Elysia({
