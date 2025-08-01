@@ -28,7 +28,7 @@ async function seedItems(items: Data[], parentId?: number) {
             await db.insert(filesTable).values({
                name: file.name,
                type: file.type as (typeof filesTable.$inferInsert)["type"],
-               folderId: result[0].insertId,
+               folder_id: result[0].insertId,
             })
          }
       }
