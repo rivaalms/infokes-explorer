@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { $fetch } from "@/utils/$fetch"
-import { computed, ref } from "vue"
-import { asyncComputed } from "@vueuse/core"
+import { computed, ref, shallowRef } from "vue"
+import { asyncComputed, watchDebounced } from "@vueuse/core"
 
 const currentDir = defineModel<Model.Folder | undefined>("currentDir", {
    required: true,
@@ -18,15 +18,24 @@ const cachedFiles = ref<
       files: Model.File[]
    }[]
 >([])
-async function fetchFiles(folderId: number) {
-   const response = await $fetch<API.Response<Model.File[]>>(`/files`, {
-      method: "get",
-      query: {
-         folderId,
-      },
-   })
 
-   return response.data
+const loading = shallowRef(false)
+async function fetchFiles(folderId?: number, search?: string) {
+   loading.value = true
+   try {
+      const response = await $fetch<API.Response<Model.File[]>>(`/files`, {
+         method: "get",
+         query: {
+            folderId,
+            search,
+         },
+      })
+      return response.data
+   } catch (e) {
+      return []
+   } finally {
+      loading.value = false
+   }
 }
 
 function saveFilesToCache(folderId: number, files: Model.File[]) {
@@ -53,44 +62,103 @@ function onFolderClick(folder: Model.Folder) {
 function onFileClick(file: Model.File) {
    alert(file.name)
 }
+
+const searchModel = shallowRef<string>()
+const searchResult = ref<Model.File[]>([])
+watchDebounced(
+   searchModel,
+   async (value) => {
+      if (!value) {
+         searchResult.value = []
+         return
+      }
+      await fetchFiles(undefined, value).then((res) => {
+         searchResult.value = res
+      })
+   },
+   { debounce: 1000, maxWait: 1000 }
+)
 </script>
 
 <template>
    <div class="grid grid-cols-6 gap-4">
-      <div class="col-span-full mb-4">
+      <div class="col-span-full mb-4 flex items-center justify-between gap-4">
          <span class="font-medium">
-            {{ currentDir?.name }}
+            {{
+               searchModel
+                  ? `Search Results for "${searchModel}"`
+                  : currentDir?.name
+            }}
          </span>
-      </div>
-      <template v-if="folders.length > 0 || filesInCurrentDir?.length || 0 > 0">
-         <template v-for="folder in folders">
-            <div
-               class="flex flex-col gap-2 items-center justify-center hover:bg-blue-500/5 hover:text-blue-500 rounded-lg p-4 cursor-pointer"
-               @click="onFolderClick(folder)"
-            >
-               <span class="lucide--folder size-12" />
-               <span class="text-sm">
-                  {{ folder.name }}
-               </span>
+         <slot name="actions">
+            <div class="relative">
+               <input
+                  v-model="searchModel"
+                  class="border border-gray-300 px-3 py-1.5 ps-8 outline-none focus:border-blue-500 rounded text-sm"
+                  placeholder="Search..."
+               />
+               <span
+                  class="absolute left-0 top-1/2 -translate-y-1/2 ms-2.5 lucide--search size-4 text-gray-400"
+               />
             </div>
-         </template>
-         <template v-for="file in filesInCurrentDir">
-            <div
-               class="flex flex-col gap-2 items-center justify-center hover:bg-blue-500/5 hover:text-blue-500 rounded-lg p-4 cursor-pointer"
-               @click="onFileClick(file)"
+         </slot>
+      </div>
+      <template v-if="!loading">
+         <template v-if="!searchModel">
+            <template
+               v-if="folders.length > 0 || filesInCurrentDir?.length || 0 > 0"
             >
-               <span class="lucide--file size-12" />
-               <span class="text-sm">
-                  {{ file.name }}
-               </span>
+               <template v-for="folder in folders">
+                  <div
+                     class="flex flex-col gap-2 items-center justify-center hover:bg-blue-500/5 hover:text-blue-500 rounded-lg p-4 cursor-pointer"
+                     @click="onFolderClick(folder)"
+                  >
+                     <span class="lucide--folder size-12" />
+                     <span class="text-sm">
+                        {{ folder.name }}
+                     </span>
+                  </div>
+               </template>
+               <template v-for="file in filesInCurrentDir">
+                  <div
+                     class="flex flex-col gap-2 items-center justify-center hover:bg-blue-500/5 hover:text-blue-500 rounded-lg p-4 cursor-pointer"
+                     @click="onFileClick(file)"
+                  >
+                     <span class="lucide--file size-12" />
+                     <span class="text-sm">
+                        {{ file.name }}
+                     </span>
+                  </div>
+               </template>
+            </template>
+         </template>
+         <template v-else>
+            <template v-for="file in searchResult">
+               <div
+                  class="flex flex-col gap-2 items-center justify-center hover:bg-blue-500/5 hover:text-blue-500 rounded-lg p-4 cursor-pointer"
+                  @click="onFileClick(file)"
+               >
+                  <span class="lucide--file size-12" />
+                  <span class="text-sm">
+                     {{ file.name }}
+                  </span>
+               </div>
+            </template>
+         </template>
+         <template
+            v-if="
+               (currentDir && !folders.length && !filesInCurrentDir?.length) ||
+               (searchModel && !searchResult.length)
+            "
+         >
+            <div class="col-span-full h-12 flex items-center justify-center">
+               <span class="font-light"> No items </span>
             </div>
          </template>
       </template>
       <template v-else>
          <div class="col-span-full h-12 flex items-center justify-center">
-            <span class="font-light">
-               No items
-            </span>
+            <span class="lucide--loader-circle animate-spin" />
          </div>
       </template>
    </div>
