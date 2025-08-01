@@ -12,9 +12,7 @@ export function folderService() {
          (item) => item.parent_id == parentId
       )
       for (const node of nodes) {
-         if (node.parent_id) {
-            node.children = buildTree(data, node.id)
-         }
+         node.children = buildTree(data, node.id)
       }
       return nodes
    }
