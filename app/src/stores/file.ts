@@ -1,15 +1,10 @@
-import { ref, computed } from "vue"
+import { ref } from "vue"
 import { defineStore } from "pinia"
 
 export const useFileStore = defineStore("file", () => {
-   const selected = ref<Model.File>()
-
-   function select(item: Model.File) {
-      selected.value = item
-   }
+   const currentDir = ref<Model.Folder>()
 
    return {
-      selected,
-      select
+      currentDir,
    }
 })
