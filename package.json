@@ -5,7 +5,9 @@
   "private": true,
   "scripts": {
     "app:dev": "bun --filter=\"app\" run dev",
-    "server:dev": "bun --filter=\"server\" run dev"
+    "server:dev": "bun --filter=\"server\" run dev",
+    "server:db:migrate": "bun --filter=\"server\" run db:migrate",
+    "server:db:seed": "bun --filter=\"server\" run db:seed"
   },
   "devDependencies": {
     "@types/bun": "latest"

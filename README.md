@@ -1,15 +1,54 @@
 # infokes
 
-To install dependencies:
+## Install dependencies
 
 ```bash
 bun install
 ```
 
-To run:
+## Running Migrations
 
 ```bash
-bun run index.ts
+bun run server:db:migrate
 ```
 
-This project was created using `bun init` in bun v1.2.19. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+## Seeding Data
+
+```bash
+bun run server:db:seed
+```
+
+## Run the app
+
+### Front-end App
+
+```bash
+bun run app:dev
+```
+
+### Back-end Server
+
+```bash
+bun run server:dev
+```
+
+## Tech Stacks & Packages
+
+### Front-end App
+
+- Vue
+- Vite
+- Bun
+- TypeScript
+- TailwindCSS
+- Pinia
+- VueUse
+- ofetch
+
+### Back-end Server
+
+- ElysiaJS
+- Drizzle ORM
+- Bun
+- TypeScript
+- MySQL
