@@ -57,25 +57,39 @@ function onFileClick(file: Model.File) {
 
 <template>
    <div class="grid grid-cols-6 gap-4">
-      <template v-for="folder in folders">
-         <div
-            class="flex flex-col gap-2 items-center justify-center hover:bg-blue-500/5 hover:text-blue-500 rounded-lg p-4 cursor-pointer"
-            @click="onFolderClick(folder)"
-         >
-            <span class="lucide--folder size-12" />
-            <span class="text-sm">
-               {{ folder.name }}
-            </span>
-         </div>
+      <div class="col-span-full mb-4">
+         <span class="font-medium">
+            {{ currentDir?.name }}
+         </span>
+      </div>
+      <template v-if="folders.length > 0 || filesInCurrentDir?.length || 0 > 0">
+         <template v-for="folder in folders">
+            <div
+               class="flex flex-col gap-2 items-center justify-center hover:bg-blue-500/5 hover:text-blue-500 rounded-lg p-4 cursor-pointer"
+               @click="onFolderClick(folder)"
+            >
+               <span class="lucide--folder size-12" />
+               <span class="text-sm">
+                  {{ folder.name }}
+               </span>
+            </div>
+         </template>
+         <template v-for="file in filesInCurrentDir">
+            <div
+               class="flex flex-col gap-2 items-center justify-center hover:bg-blue-500/5 hover:text-blue-500 rounded-lg p-4 cursor-pointer"
+               @click="onFileClick(file)"
+            >
+               <span class="lucide--file size-12" />
+               <span class="text-sm">
+                  {{ file.name }}
+               </span>
+            </div>
+         </template>
       </template>
-      <template v-for="file in filesInCurrentDir">
-         <div
-            class="flex flex-col gap-2 items-center justify-center hover:bg-blue-500/5 hover:text-blue-500 rounded-lg p-4 cursor-pointer"
-            @click="onFileClick(file)"
-         >
-            <span class="lucide--file size-12" />
-            <span class="text-sm">
-               {{ file.name }}
+      <template v-else>
+         <div class="col-span-full h-12 flex items-center justify-center">
+            <span class="font-light">
+               No items
             </span>
          </div>
       </template>
