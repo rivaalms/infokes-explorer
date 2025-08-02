@@ -21,11 +21,11 @@ onMounted(async () => {
    <div class="h-screen p-5">
       <div class="h-full rounded-xl border border-gray-200 shadow-lg">
          <div class="h-full p-4 grid grid-cols-4 gap-4">
-            <div class="flex flex-col gap-1 border-e border-gray-200 pe-4">
+            <div class="flex flex-col overflow-y-auto gap-1 border-e border-gray-200 pe-4">
                <FolderTree :data="data" />
             </div>
             <div class="col-span-3 p-4">
-               <ItemGrid :current-dir="fileStore.currentDir" />
+               <ItemGrid v-model:current-dir="fileStore.currentDir" />
             </div>
          </div>
       </div>
